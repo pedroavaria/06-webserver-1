@@ -1,21 +1,35 @@
 import express from 'express'
+import hbs from 'hbs'
+require('dotenv').config()
 const app = express()
-const port = 8080
+const port = process.env.PORT
+
+// Handlebas
+app.set('view engine','hbs')
+hbs.registerPartials(__dirname + '/views/partials');
 
 // Servir contenido estático
-
 app.use(express.static('public'))
+
+const datos = {
+    nombre: 'Pedro Avaria',
+    titulo: 'Curso de node'
+}
+
+app.get('/', (req,res) => {
+    res.render('home',datos)
+})
 
 app.get('/hola-mundo', (req,res) => {
     res.send('Hola que tal')
 })
 
 app.get('/generic', (req,res) => {
-    res.sendFile(__dirname + '/public/generic.html')
+    res.render('generic',datos)
 })
 
 app.get('/elements', (req,res) => {
-    res.sendFile(__dirname + '/public/elements.html')
+    res.render('elements',datos)
 })
 
 app.get('*', (req,res) => {
